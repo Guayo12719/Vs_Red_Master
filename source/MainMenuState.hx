@@ -13,7 +13,6 @@ import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.util.FlxTimer;
-import io.newgrounds.NG;
 import lime.app.Application;
 
 #if windows
@@ -132,6 +131,10 @@ class MainMenuState extends MusicBeatState
 
 		changeItem();
 
+		#if mobileC
+        addVirtualPad(UP_DOWN, A_B);
+        #end
+
 		super.create();
 	}
 
@@ -162,13 +165,13 @@ class MainMenuState extends MusicBeatState
 				}
 			}
 
-			if (FlxG.keys.justPressed.UP)
+			if (controls.UP_P)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				changeItem(-1);
 			}
 
-			if (FlxG.keys.justPressed.DOWN)
+			if (controls.DOWN_P)
 			{
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				changeItem(1);
@@ -274,12 +277,10 @@ class MainMenuState extends MusicBeatState
 						{
 							new FlxTimer().start(0.7, function(tmr:FlxTimer)
 							{
-								var video:MP4Handler = new MP4Handler();
-								video.playMP4(Paths.video('CUTSCENE'));
-								 video.finishCallback = function()
+								FlxG.switchState(new VideoState2('assets/videos/CUTSCENE.webm', function()
 								{
 									LoadingState.loadAndSwitchState(new PlayState(), true);
-								}
+								}));
 							});
 							
 						});
